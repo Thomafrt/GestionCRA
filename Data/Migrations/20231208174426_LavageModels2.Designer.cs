@@ -4,6 +4,7 @@ using GestionCRA.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionCRA.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231208174426_LavageModels2")]
+    partial class LavageModels2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -103,9 +106,6 @@ namespace GestionCRA.Data.Migrations
                     b.Property<int?>("WednesdayHours")
                         .HasColumnType("int");
 
-                    b.Property<int>("WeekNb")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("EmployeeId");
@@ -141,7 +141,7 @@ namespace GestionCRA.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Missions");
+                    b.ToTable("Mission");
                 });
 
             modelBuilder.Entity("CRA.Models.Domain.Report", b =>
@@ -166,21 +166,6 @@ namespace GestionCRA.Data.Migrations
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("Reports");
-                });
-
-            modelBuilder.Entity("EmployeeMission", b =>
-                {
-                    b.Property<int>("AssignedId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MissionsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AssignedId", "MissionsId");
-
-                    b.HasIndex("MissionsId");
-
-                    b.ToTable("EmployeeMission");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -413,21 +398,6 @@ namespace GestionCRA.Data.Migrations
                     b.HasOne("CRA.Models.Domain.Employee", null)
                         .WithMany("Reports")
                         .HasForeignKey("EmployeeId");
-                });
-
-            modelBuilder.Entity("EmployeeMission", b =>
-                {
-                    b.HasOne("CRA.Models.Domain.Employee", null)
-                        .WithMany()
-                        .HasForeignKey("AssignedId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CRA.Models.Domain.Mission", null)
-                        .WithMany()
-                        .HasForeignKey("MissionsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

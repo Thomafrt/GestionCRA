@@ -13,5 +13,6 @@ namespace CRA.Models.Domain
         public string? Email { get; set; }
         public ICollection<Entry>? Entries { get; set; }
         public ICollection<Report>? Reports { get; set; }
+        public ICollection<Mission>? Missions { get; set; }
     }
 }

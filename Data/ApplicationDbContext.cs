@@ -13,7 +13,7 @@ namespace GestionCRA.Data
         }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Employee> Employees { get; set; }
-        public DbSet<Mission> Mission { get; set; }
+        public DbSet<Mission> Missions { get; set; }
         public DbSet<Entry> Entries { get; set; }
         public DbSet<Report> Reports { get; set; }
     }

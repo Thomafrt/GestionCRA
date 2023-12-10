@@ -9,6 +9,8 @@ namespace CRA.Models.Domain
         public Employee Employee { get; set; }
         [Required]
         public Mission Mission { get; set; }
+        [Required]
+        public int WeekNb { get; set; }
         public int? MondayHours { get; set; }
         public int? TuesdayHours { get; set; }
         public int? WednesdayHours { get; set; }

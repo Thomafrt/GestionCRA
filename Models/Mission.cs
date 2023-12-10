@@ -13,7 +13,7 @@ namespace CRA.Models.Domain
         public int BeginWeek { get; set; }
         [Required]
         public int EndWeek { get; set; }
+        [Required]
+        public ICollection<Employee>? Assigned { get; set; }
     }
 }
-
-

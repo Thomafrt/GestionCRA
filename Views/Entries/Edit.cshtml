@@ -1,0 +1,64 @@
+﻿@model CRA.Models.Domain.Entry
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Entry</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="MondayHours" class="control-label"></label>
+                <input asp-for="MondayHours" class="form-control" />
+                <span asp-validation-for="MondayHours" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TuesdayHours" class="control-label"></label>
+                <input asp-for="TuesdayHours" class="form-control" />
+                <span asp-validation-for="TuesdayHours" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WednesdayHours" class="control-label"></label>
+                <input asp-for="WednesdayHours" class="form-control" />
+                <span asp-validation-for="WednesdayHours" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ThursdayHours" class="control-label"></label>
+                <input asp-for="ThursdayHours" class="form-control" />
+                <span asp-validation-for="ThursdayHours" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FridayHours" class="control-label"></label>
+                <input asp-for="FridayHours" class="form-control" />
+                <span asp-validation-for="FridayHours" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SaturdayHours" class="control-label"></label>
+                <input asp-for="SaturdayHours" class="form-control" />
+                <span asp-validation-for="SaturdayHours" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SundayHours" class="control-label"></label>
+                <input asp-for="SundayHours" class="form-control" />
+                <span asp-validation-for="SundayHours" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

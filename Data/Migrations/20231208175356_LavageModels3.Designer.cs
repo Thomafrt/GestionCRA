@@ -4,6 +4,7 @@ using GestionCRA.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionCRA.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231208175356_LavageModels3")]
+    partial class LavageModels3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,12 +58,17 @@ namespace GestionCRA.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("MissionId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MissionId");
 
                     b.ToTable("Employees");
                 });
@@ -101,9 +109,6 @@ namespace GestionCRA.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("WednesdayHours")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WeekNb")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -166,21 +171,6 @@ namespace GestionCRA.Data.Migrations
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("Reports");
-                });
-
-            modelBuilder.Entity("EmployeeMission", b =>
-                {
-                    b.Property<int>("AssignedId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MissionsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AssignedId", "MissionsId");
-
-                    b.HasIndex("MissionsId");
-
-                    b.ToTable("EmployeeMission");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -385,6 +375,13 @@ namespace GestionCRA.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("CRA.Models.Domain.Employee", b =>
+                {
+                    b.HasOne("CRA.Models.Domain.Mission", null)
+                        .WithMany("Employees")
+                        .HasForeignKey("MissionId");
+                });
+
             modelBuilder.Entity("CRA.Models.Domain.Entry", b =>
                 {
                     b.HasOne("CRA.Models.Domain.Employee", "Employee")
@@ -413,21 +410,6 @@ namespace GestionCRA.Data.Migrations
                     b.HasOne("CRA.Models.Domain.Employee", null)
                         .WithMany("Reports")
                         .HasForeignKey("EmployeeId");
-                });
-
-            modelBuilder.Entity("EmployeeMission", b =>
-                {
-                    b.HasOne("CRA.Models.Domain.Employee", null)
-                        .WithMany()
-                        .HasForeignKey("AssignedId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CRA.Models.Domain.Mission", null)
-                        .WithMany()
-                        .HasForeignKey("MissionsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -486,6 +468,11 @@ namespace GestionCRA.Data.Migrations
                     b.Navigation("Entries");
 
                     b.Navigation("Reports");
+                });
+
+            modelBuilder.Entity("CRA.Models.Domain.Mission", b =>
+                {
+                    b.Navigation("Employees");
                 });
 
             modelBuilder.Entity("CRA.Models.Domain.Report", b =>

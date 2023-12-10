@@ -4,6 +4,7 @@ using GestionCRA.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionCRA.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231208181014_LavageModels5")]
+    partial class LavageModels5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -103,9 +106,6 @@ namespace GestionCRA.Data.Migrations
                     b.Property<int?>("WednesdayHours")
                         .HasColumnType("int");
 
-                    b.Property<int>("WeekNb")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("EmployeeId");
@@ -170,13 +170,13 @@ namespace GestionCRA.Data.Migrations
 
             modelBuilder.Entity("EmployeeMission", b =>
                 {
-                    b.Property<int>("AssignedId")
+                    b.Property<int>("EmployeesId")
                         .HasColumnType("int");
 
                     b.Property<int>("MissionsId")
                         .HasColumnType("int");
 
-                    b.HasKey("AssignedId", "MissionsId");
+                    b.HasKey("EmployeesId", "MissionsId");
 
                     b.HasIndex("MissionsId");
 
@@ -419,7 +419,7 @@ namespace GestionCRA.Data.Migrations
                 {
                     b.HasOne("CRA.Models.Domain.Employee", null)
                         .WithMany()
-                        .HasForeignKey("AssignedId")
+                        .HasForeignKey("EmployeesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
