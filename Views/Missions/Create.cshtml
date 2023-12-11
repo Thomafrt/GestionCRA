@@ -1,4 +1,4 @@
-﻿@model CRA.Models.Domain.Mission
+﻿@model CRA.Models.Mission
 
 @{
     ViewData["Title"] = "Create";
@@ -6,16 +6,14 @@
 
 <h1>Create</h1>
 
-<h4>Mission</h4>
-<hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label asp-for="Nom" class="control-label"></label>
+                <input asp-for="Nom" class="form-control" />
+                <span asp-validation-for="Nom" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
@@ -23,25 +21,23 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="BeginWeek" class="control-label"></label>
-                <input asp-for="BeginWeek" class="form-control" />
-                <span asp-validation-for="BeginWeek" class="text-danger"></span>
+                <label asp-for="SemaineDebut" class="control-label"></label>
+                <input asp-for="SemaineDebut" class="form-control" />
+                <span asp-validation-for="SemaineDebut" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EndWeek" class="control-label"></label>
-                <input asp-for="EndWeek" class="form-control" />
-                <span asp-validation-for="EndWeek" class="text-danger"></span>
+                <label asp-for="SemaineFin" class="control-label"></label>
+                <input asp-for="SemaineFin" class="form-control" />
+                <span asp-validation-for="SemaineFin" class="text-danger"></span>
             </div>
+
+            <!-- Ajout de la liste déroulante multisélection pour les employés -->
             <div class="form-group">
-                <label asp-for="AssignedEmployeeIds" class="control-label">Assigned Employees</label>
-                @foreach (var employee in Model.AllEmployees)
-                {
-                    <div class="form-check">
-                        <input type="checkbox" name="AssignedEmployeeIds" value="@employee.Id" />
-                        <label class="form-check-label">@employee.Name</label>
-                    </div>
-                }
+                <label for="EmployeeIds">Employees</label>
+                <select asp-for="EmployeeIds" class="form-control" asp-items="ViewBag.EmployeeList" multiple></select>
+                <small class="form-text text-muted">Maintenez la touche CTRL enfoncée pour sélectionner plusieurs employés.</small>
             </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

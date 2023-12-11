@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CRA.Models.Domain
+namespace CRA.Models
 {
     public class Admin
     {

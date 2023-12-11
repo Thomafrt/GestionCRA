@@ -1,25 +1,34 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CRA.Models.Domain
+namespace CRA.Models
 {
     public class Mission
     {
         public int Id { get; set; }
+
         [Required]
-        public string? Name { get; set; }
+        public string? Nom { get; set; }
+
         [Required]
         public string? Description { get; set; }
+
         [Required]
-        public int BeginWeek { get; set; }
+        public int SemaineDebut { get; set; }
+
         [Required]
-        public int EndWeek { get; set; }
-        [Required]
+        public int SemaineFin { get; set; }
+
+        // Propriété de navigation pour la relation plusieurs à plusieurs avec Employee
+        public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
+        // Propriété pour stocker les identifiants des employés associés à la mission
         [NotMapped]
-        public ICollection<Employee>? Assigned { get; set; }
-        [NotMapped]
-        public List<Employee> AllEmployees { get; set; }
-        [NotMapped]
-        public List<int> AssignedEmployeeIds { get; set; }
+        public List<int> EmployeeIds { get; set; } = new List<int>();
+
+        // Propriété de navigation pour la relation un à plusieurs avec Entry
+        public virtual ICollection<Entry> Entries { get; set; } = new List<Entry>();
+
+        // Propriété de navigation pour la relation un à plusieurs avec Report
+        public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
     }
 }

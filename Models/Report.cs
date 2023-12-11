@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CRA.Models.Domain
+namespace CRA.Models
 {
     public class Report
     {
@@ -11,5 +12,12 @@ namespace CRA.Models.Domain
         public int EndWeek { get; set; }
         [Required]
         public ICollection<Entry>? Entries { get; set; }
+
+        // Clé étrangère pour Employee
+        public int EmployeeId { get; set; }
+
+        // Propriété de navigation pour Employee
+        [ForeignKey(nameof(EmployeeId))]
+        public virtual Employee Employee { get; set; }
     }
 }

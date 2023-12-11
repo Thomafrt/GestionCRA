@@ -1,18 +1,26 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CRA.Models.Domain
+namespace CRA.Models
 {
     public class Employee
     {
         public int Id { get; set; }
+
         [Required]
         [StringLength(100)]
-        public string? Name { get; set; }
+        public string? Nom { get; set; }
+
         [Required]
         [EmailAddress]
         public string? Email { get; set; }
-        public ICollection<Entry>? Entries { get; set; }
-        public ICollection<Report>? Reports { get; set; }
-        public ICollection<Mission>? Missions { get; set; }
+
+        // Propriété de navigation pour la relation plusieurs à plusieurs avec Mission
+        public virtual ICollection<Mission> Missions { get; set; } = new List<Mission>();
+
+        // Propriété de navigation pour la relation un à plusieurs avec Entry
+        public virtual ICollection<Entry> Entries { get; set; } = new List<Entry>();
+
+        // Propriété de navigation pour la relation un à plusieurs avec Report
+        public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
     }
 }

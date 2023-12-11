@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using CRA.Models.Domain;
+using CRA.Models;
 using GestionCRA.Data;
 
 namespace GestionCRA.Controllers
@@ -22,13 +22,54 @@ namespace GestionCRA.Controllers
         // GET: Missions
         public async Task<IActionResult> Index()
         {
-              return _context.Missions != null ? 
-                          View(await _context.Missions.Include(m => m.Assigned).ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Missions'  is null.");
+            if (_context.Missions == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Missions' is null.");
+            }
+
+            // Charger les employés liés lors de la récupération des missions
+            var missions = await _context.Missions
+                .Include(m => m.Employees) // Charger les employés liés
+                .ToListAsync();
+
+            return View(missions);
         }
 
-        // GET: Missions/Details/5
-        public async Task<IActionResult> Details(int? id)
+
+        // GET: Missions/Create
+        public IActionResult Create()
+        {
+            // Charger la liste des employés pour la vue
+            ViewBag.EmployeeList = new MultiSelectList(_context.Employees, "Id", "Nom");
+            return View();
+        }
+
+
+        // POST: Missions/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,Nom,Description,SemaineDebut,SemaineFin,EmployeeIds")] Mission mission)
+        {
+            if (ModelState.IsValid)
+            {
+                // Charger les employés sélectionnés
+                mission.Employees = await _context.Employees
+                    .Where(e => mission.EmployeeIds.Contains(e.Id))
+                    .ToListAsync();
+
+                _context.Add(mission);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Recharger la liste des employés pour la vue
+            ViewBag.EmployeeList = new SelectList(_context.Employees, "Id", "Nom", mission.EmployeeIds);
+            return View(mission);
+        }
+
+
+        // GET: Missions/Edit/5
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Missions == null)
             {
@@ -36,58 +77,25 @@ namespace GestionCRA.Controllers
             }
 
             var mission = await _context.Missions
+                .Include(m => m.Employees)  // Inclure la liste des employés associés à la mission
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (mission == null)
             {
                 return NotFound();
             }
 
-            return View(mission);
-        }
-
-        // GET: Missions/Create
-        public IActionResult Create()
-        {
-            // Récupérer tous les employés depuis la base de données ou une autre source de données
-            var allEmployees = _context.Employees.ToList();
-
-            // Créer une nouvelle instance de Mission avec la liste d'employés
-            var mission = new Mission
-            {
-                AllEmployees = allEmployees
-            };
+            // Charger la liste des employés pour la vue
+            ViewBag.EmployeeList = new MultiSelectList(_context.Employees, "Id", "Nom", mission.EmployeeIds);
 
             return View(mission);
         }
 
-
-        // POST: Missions/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,BeginWeek,EndWeek,AssignedEmployeeIds")] Mission mission)
-        {
-            if (ModelState.IsValid)
-            {
-                // Charger les employés assignés
-                mission.Assigned = _context.Employees.Where(e => mission.AssignedEmployeeIds.Contains(e.Id)).ToList();
-
-                _context.Add(mission);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-
-            // Si la validation échoue, rechargez la liste de tous les employés
-            mission.AllEmployees = _context.Employees.ToList();
-
-            return View(mission);
-        }
 
         // POST: Missions/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,BeginWeek,EndWeek")] Mission mission)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nom,Description,SemaineDebut,SemaineFin,EmployeeIds")] Mission mission)
         {
             if (id != mission.Id)
             {
@@ -98,6 +106,11 @@ namespace GestionCRA.Controllers
             {
                 try
                 {
+                    // Charger les employés sélectionnés
+                    mission.Employees = await _context.Employees
+                        .Where(e => mission.EmployeeIds.Contains(e.Id))
+                        .ToListAsync();
+
                     _context.Update(mission);
                     await _context.SaveChangesAsync();
                 }
@@ -114,8 +127,12 @@ namespace GestionCRA.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            // Recharger la liste des employés pour la vue
+            ViewBag.EmployeeList = new MultiSelectList(_context.Employees, "Id", "Nom", mission.EmployeeIds);
             return View(mission);
         }
+
 
         // GET: Missions/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -126,7 +143,9 @@ namespace GestionCRA.Controllers
             }
 
             var mission = await _context.Missions
+                .Include(m => m.Employees)  // Charger les employés associés à la mission
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (mission == null)
             {
                 return NotFound();
