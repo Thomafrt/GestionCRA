@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CRA.Models.Domain
 {
@@ -14,6 +15,11 @@ namespace CRA.Models.Domain
         [Required]
         public int EndWeek { get; set; }
         [Required]
+        [NotMapped]
         public ICollection<Employee>? Assigned { get; set; }
+        [NotMapped]
+        public List<Employee> AllEmployees { get; set; }
+        [NotMapped]
+        public List<int> AssignedEmployeeIds { get; set; }
     }
 }

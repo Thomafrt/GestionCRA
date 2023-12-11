@@ -46,6 +46,12 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.EndWeek)
                 </td>
+                <td>
+                    @foreach (var employee in item.Assigned)
+                    {
+                        <div>@employee.Name</div>
+                    }
+                </td>
     
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

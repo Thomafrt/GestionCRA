@@ -48,38 +48,37 @@ namespace GestionCRA.Controllers
         // GET: Missions/Create
         public IActionResult Create()
         {
-            return View();
+            // Récupérer tous les employés depuis la base de données ou une autre source de données
+            var allEmployees = _context.Employees.ToList();
+
+            // Créer une nouvelle instance de Mission avec la liste d'employés
+            var mission = new Mission
+            {
+                AllEmployees = allEmployees
+            };
+
+            return View(mission);
         }
 
-        // POST: Missions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+        // POST: Missions/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,BeginWeek,EndWeek")] Mission mission)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,BeginWeek,EndWeek,AssignedEmployeeIds")] Mission mission)
         {
             if (ModelState.IsValid)
             {
+                // Charger les employés assignés
+                mission.Assigned = _context.Employees.Where(e => mission.AssignedEmployeeIds.Contains(e.Id)).ToList();
+
                 _context.Add(mission);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(mission);
-        }
 
-        // GET: Missions/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Missions == null)
-            {
-                return NotFound();
-            }
+            // Si la validation échoue, rechargez la liste de tous les employés
+            mission.AllEmployees = _context.Employees.ToList();
 
-            var mission = await _context.Missions.FindAsync(id);
-            if (mission == null)
-            {
-                return NotFound();
-            }
             return View(mission);
         }
 
