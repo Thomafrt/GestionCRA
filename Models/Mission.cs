@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
 
 namespace CRA.Models
 {
@@ -8,10 +9,10 @@ namespace CRA.Models
         public int Id { get; set; }
 
         [Required]
-        public string? Nom { get; set; }
+        public string Nom { get; set; }
 
         [Required]
-        public string? Description { get; set; }
+        public string Description { get; set; }
 
         [Required]
         public int SemaineDebut { get; set; }
@@ -21,6 +22,7 @@ namespace CRA.Models
 
         // Propriété de navigation pour la relation plusieurs à plusieurs avec Employee
         public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
+
         // Propriété pour stocker les identifiants des employés associés à la mission
         [NotMapped]
         public List<int> EmployeeIds { get; set; } = new List<int>();

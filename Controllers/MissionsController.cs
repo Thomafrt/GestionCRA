@@ -106,12 +106,28 @@ namespace GestionCRA.Controllers
             {
                 try
                 {
+                    // Charger la mission depuis la base de données avec les employés associés
+                    var existingMission = await _context.Missions
+                        .Include(m => m.Employees)
+                        .FirstOrDefaultAsync(m => m.Id == id);
+
+                    if (existingMission == null)
+                    {
+                        return NotFound();
+                    }
+
+                    // Mettre à jour les propriétés de la mission
+                    existingMission.Nom = mission.Nom;
+                    existingMission.Description = mission.Description;
+                    existingMission.SemaineDebut = mission.SemaineDebut;
+                    existingMission.SemaineFin = mission.SemaineFin;
+
                     // Charger les employés sélectionnés
-                    mission.Employees = await _context.Employees
+                    existingMission.Employees = await _context.Employees
                         .Where(e => mission.EmployeeIds.Contains(e.Id))
                         .ToListAsync();
 
-                    _context.Update(mission);
+                    _context.Update(existingMission);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -128,10 +144,11 @@ namespace GestionCRA.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // Recharger la liste des employés pour la vue
+            // Si la validation a échoué, rechargez la liste des employés pour la vue
             ViewBag.EmployeeList = new MultiSelectList(_context.Employees, "Id", "Nom", mission.EmployeeIds);
             return View(mission);
         }
+
 
 
         // GET: Missions/Delete/5

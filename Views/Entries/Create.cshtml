@@ -1,0 +1,88 @@
+﻿@model CRA.Models.Entry
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Entry</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="EmployeeId" class="control-label"></label>
+                <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId"></select>
+                <span asp-validation-for="EmployeeId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="MissionId" class="control-label"></label>
+                <select asp-for="MissionId" class="form-control" asp-items="ViewBag.MissionId"></select>
+                <span asp-validation-for="MissionId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Etat" class="control-label"></label>
+                <select asp-for="Etat" class="form-control" asp-items="@(ViewBag.EtatOptions)"></select>
+                <span asp-validation-for="Etat" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumeroSemaine" class="control-label"></label>
+                <input asp-for="NumeroSemaine" class="form-control" />
+                <span asp-validation-for="NumeroSemaine" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HeuresLundi" class="control-label"></label>
+                <input asp-for="HeuresLundi" class="form-control" />
+                <span asp-validation-for="HeuresLundi" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HeuresMardi" class="control-label"></label>
+                <input asp-for="HeuresMardi" class="form-control" />
+                <span asp-validation-for="HeuresMardi" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HeuresMercredi" class="control-label"></label>
+                <input asp-for="HeuresMercredi" class="form-control" />
+                <span asp-validation-for="HeuresMercredi" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HeuresJeudi" class="control-label"></label>
+                <input asp-for="HeuresJeudi" class="form-control" />
+                <span asp-validation-for="HeuresJeudi" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HeuresVendredi" class="control-label"></label>
+                <input asp-for="HeuresVendredi" class="form-control" />
+                <span asp-validation-for="HeuresVendredi" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HeuresSamedi" class="control-label"></label>
+                <input asp-for="HeuresSamedi" class="form-control" />
+                <span asp-validation-for="HeuresSamedi" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HeuresDimanche" class="control-label"></label>
+                <input asp-for="HeuresDimanche" class="form-control" />
+                <span asp-validation-for="HeuresDimanche" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

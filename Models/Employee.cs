@@ -8,11 +8,11 @@ namespace CRA.Models
 
         [Required]
         [StringLength(100)]
-        public string? Nom { get; set; }
+        public string Nom { get; set; }
 
         [Required]
         [EmailAddress]
-        public string? Email { get; set; }
+        public string Email { get; set; }
 
         // Propriété de navigation pour la relation plusieurs à plusieurs avec Mission
         public virtual ICollection<Mission> Missions { get; set; } = new List<Mission>();

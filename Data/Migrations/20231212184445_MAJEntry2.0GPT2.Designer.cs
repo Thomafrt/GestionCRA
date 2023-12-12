@@ -4,6 +4,7 @@ using GestionCRA.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionCRA.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231212184445_MAJEntry2.0GPT2")]
+    partial class MAJEntry20GPT2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,7 +43,7 @@ namespace GestionCRA.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Admins", (string)null);
+                    b.ToTable("Admins");
                 });
 
             modelBuilder.Entity("CRA.Models.Employee", b =>
@@ -62,7 +65,7 @@ namespace GestionCRA.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Employees", (string)null);
+                    b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("CRA.Models.Entry", b =>
@@ -117,7 +120,7 @@ namespace GestionCRA.Data.Migrations
 
                     b.HasIndex("ReportId");
 
-                    b.ToTable("Entries", (string)null);
+                    b.ToTable("Entries");
                 });
 
             modelBuilder.Entity("CRA.Models.Mission", b =>
@@ -144,7 +147,7 @@ namespace GestionCRA.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Missions", (string)null);
+                    b.ToTable("Missions");
                 });
 
             modelBuilder.Entity("CRA.Models.Report", b =>
@@ -173,7 +176,7 @@ namespace GestionCRA.Data.Migrations
 
                     b.HasIndex("MissionId");
 
-                    b.ToTable("Reports", (string)null);
+                    b.ToTable("Reports");
                 });
 
             modelBuilder.Entity("EmployeeMission", b =>
@@ -188,7 +191,7 @@ namespace GestionCRA.Data.Migrations
 
                     b.HasIndex("MissionsId");
 
-                    b.ToTable("EmployeeMission", (string)null);
+                    b.ToTable("EmployeeMission");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

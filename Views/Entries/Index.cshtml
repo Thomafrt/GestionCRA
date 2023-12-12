@@ -1,0 +1,95 @@
+﻿@model IEnumerable<CRA.Models.Entry>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Employee)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Mission)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Etat)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumeroSemaine)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HeuresLundi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HeuresMardi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HeuresMercredi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HeuresJeudi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HeuresVendredi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HeuresSamedi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HeuresDimanche)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Mission.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Etat)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumeroSemaine)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HeuresLundi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HeuresMardi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HeuresMercredi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HeuresJeudi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HeuresVendredi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HeuresSamedi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HeuresDimanche)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
