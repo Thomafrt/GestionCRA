@@ -20,7 +20,5 @@ namespace CRA.Models
         // Propriété de navigation pour la relation un à plusieurs avec Entry
         public virtual ICollection<Entry> Entries { get; set; } = new List<Entry>();
 
-        // Propriété de navigation pour la relation un à plusieurs avec Report
-        public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
     }
 }

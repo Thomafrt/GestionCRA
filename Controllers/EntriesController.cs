@@ -13,12 +13,10 @@ namespace GestionCRA.Controllers
     public class EntriesController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly ILogger<EntriesController> _logger;
 
-        public EntriesController(ApplicationDbContext context, ILogger<EntriesController> logger)
+        public EntriesController(ApplicationDbContext context)
         {
             _context = context;
-            _logger = logger;
         }
 
         // GET: Entries
@@ -28,78 +26,31 @@ namespace GestionCRA.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Entries/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Entries == null)
-            {
-                return NotFound();
-            }
-
-            var entry = await _context.Entries
-                .Include(e => e.Employee)
-                .Include(e => e.Mission)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (entry == null)
-            {
-                return NotFound();
-            }
-
-            return View(entry);
-        }
-
         // GET: Entries/Create
         public IActionResult Create()
         {
-            ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "Email");
-            ViewData["MissionId"] = new SelectList(_context.Missions, "Id", "Description");
-            ViewBag.EtatOptions = new SelectList(Enum.GetValues(typeof(EtatEntry)));
-
+            ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "Nom");
+            ViewData["MissionId"] = new SelectList(_context.Missions, "Id", "Nom");
             return View();
         }
 
         // POST: Entries/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,EmployeeId,MissionId,Etat,NumeroSemaine,HeuresLundi,HeuresMardi,HeuresMercredi,HeuresJeudi,HeuresVendredi,HeuresSamedi,HeuresDimanche,DateCreation")] Entry entry)
+        public async Task<IActionResult> Create([Bind("Id,MissionId,EmployeeId,State,Week,SundayHours,MondayHours,TuesdayHours,WednesdayHours,ThursdayHours,FridayHours,SaturdayHours")] Entry entry)
         {
-
             if (ModelState.IsValid)
             {
-                try
-                {
-                    // Charger les entités associées pour le cas où le modèle n'est pas valide
-                    entry.Employee = _context.Employees.Find(entry.EmployeeId);
-                    entry.Mission = _context.Missions.Find(entry.MissionId);
-                    _context.Add(entry);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError("Error saving to database: {0}", ex.Message);
-                    throw;
-                }
+                _context.Add(entry);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-
-            foreach (var modelStateEntry in ModelState.Values)
-            {
-                foreach (var error in modelStateEntry.Errors)
-                {
-                    _logger.LogError("ModelState Error: {0}", error.ErrorMessage);
-                }
-            }
-
-            ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "Email", entry.EmployeeId);
-            ViewData["MissionId"] = new SelectList(_context.Missions, "Id", "Description", entry.MissionId);
-            ViewBag.EtatOptions = new SelectList(Enum.GetValues(typeof(EtatEntry)));
+            ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "Nom", entry.EmployeeId);
+            ViewData["MissionId"] = new SelectList(_context.Missions, "Id", "Nom", entry.MissionId);
             return View(entry);
         }
-
-
-
-
-
 
         // GET: Entries/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -114,8 +65,8 @@ namespace GestionCRA.Controllers
             {
                 return NotFound();
             }
-            ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "Email", entry.EmployeeId);
-            ViewData["MissionId"] = new SelectList(_context.Missions, "Id", "Description", entry.MissionId);
+            ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "Nom", entry.EmployeeId);
+            ViewData["MissionId"] = new SelectList(_context.Missions, "Id", "Nom", entry.MissionId);
             return View(entry);
         }
 
@@ -124,7 +75,7 @@ namespace GestionCRA.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,EmployeeId,MissionId,Etat,NumeroSemaine,HeuresLundi,HeuresMardi,HeuresMercredi,HeuresJeudi,HeuresVendredi,HeuresSamedi,HeuresDimanche,DateCreation")] Entry entry)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,MissionId,EmployeeId,State,Week,SundayHours,MondayHours,TuesdayHours,WednesdayHours,ThursdayHours,FridayHours,SaturdayHours")] Entry entry)
         {
             if (id != entry.Id)
             {
@@ -151,8 +102,8 @@ namespace GestionCRA.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "Email", entry.EmployeeId);
-            ViewData["MissionId"] = new SelectList(_context.Missions, "Id", "Description", entry.MissionId);
+            ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "Nom", entry.EmployeeId);
+            ViewData["MissionId"] = new SelectList(_context.Missions, "Id", "Nom", entry.MissionId);
             return View(entry);
         }
 
@@ -199,5 +150,44 @@ namespace GestionCRA.Controllers
         {
           return (_context.Entries?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
+
+        public async Task<IActionResult> ValidateEntry()
+        {
+            var applicationDbContext = _context.Entries.Include(e => e.Employee).Include(e => e.Mission);
+            return View(await applicationDbContext.ToListAsync());
+        }
+
+        [HttpPost]
+        public IActionResult Validate(int id, string newState)
+        {
+            Entry entry = _context.Entries.Find(id);
+
+            if (entry == null)
+            {
+                return NotFound(); // Entrée non trouvée, renvoyer une vue appropriée ou une erreur.
+            }
+
+            // Mettre à jour l'état en fonction du bouton cliqué
+            switch (newState)
+            {
+                case "Valide":
+                    entry.State = EntryState.Valide;
+                    break;
+                case "Refuse":
+                    entry.State = EntryState.Refuse;
+                    break;
+                // Ajoutez d'autres états si nécessaire
+                default:
+                    // Gérer un état inattendu
+                    break;
+            }
+
+            _context.SaveChanges(); // Sauvegarder les modifications dans la base de données
+
+            return RedirectToAction("Details", new { id = entry.Id });
+        }
+
+
     }
 }

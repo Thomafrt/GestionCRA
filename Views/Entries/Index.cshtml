@@ -13,37 +13,37 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Employee)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Mission)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Etat)
+                @Html.DisplayNameFor(model => model.Employee)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NumeroSemaine)
+                @Html.DisplayNameFor(model => model.State)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HeuresLundi)
+                @Html.DisplayNameFor(model => model.Week)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HeuresMardi)
+                @Html.DisplayNameFor(model => model.SundayHours)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HeuresMercredi)
+                @Html.DisplayNameFor(model => model.MondayHours)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HeuresJeudi)
+                @Html.DisplayNameFor(model => model.TuesdayHours)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HeuresVendredi)
+                @Html.DisplayNameFor(model => model.WednesdayHours)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HeuresSamedi)
+                @Html.DisplayNameFor(model => model.ThursdayHours)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HeuresDimanche)
+                @Html.DisplayNameFor(model => model.FridayHours)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SaturdayHours)
             </th>
             <th></th>
         </tr>
@@ -52,41 +52,40 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Employee.Email)
+                @Html.DisplayFor(modelItem => item.Mission.Nom)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Mission.Description)
+                @Html.DisplayFor(modelItem => item.Employee.Nom)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Etat)
+                @Html.DisplayFor(modelItem => item.State)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.NumeroSemaine)
+                @Html.DisplayFor(modelItem => item.Week)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.HeuresLundi)
+                @Html.DisplayFor(modelItem => item.SundayHours)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.HeuresMardi)
+                @Html.DisplayFor(modelItem => item.MondayHours)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.HeuresMercredi)
+                @Html.DisplayFor(modelItem => item.TuesdayHours)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.HeuresJeudi)
+                @Html.DisplayFor(modelItem => item.WednesdayHours)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.HeuresVendredi)
+                @Html.DisplayFor(modelItem => item.ThursdayHours)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.HeuresSamedi)
+                @Html.DisplayFor(modelItem => item.FridayHours)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.HeuresDimanche)
+                @Html.DisplayFor(modelItem => item.SaturdayHours)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>

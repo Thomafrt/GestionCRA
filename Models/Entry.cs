@@ -4,57 +4,42 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CRA.Models
 {
-    public enum EtatEntry
-    {
-        Valide,
-        Refuse,
-        Sauvegarde,
-        Soumis
-    }
-
     public class Entry
     {
         public int Id { get; set; }
 
         [Required]
-        // Clé étrangère pour Employee
-        public int EmployeeId { get; set; }
-        // Propriété de navigation pour Employee
-        [ForeignKey(nameof(EmployeeId))]
-        public virtual Employee Employee { get; set; }
+        public int MissionId { get; set; } = 1;
+        // Propriété de navigation pour la relation plusieurs à un avec Mission
+        public virtual Mission? Mission { get; set; }
 
         [Required]
-        // Clé étrangère pour Mission
-        public int MissionId { get; set; }
-        // Propriété de navigation pour Mission
-        [ForeignKey(nameof(MissionId))]
-        public virtual Mission Mission { get; set; }
-
-        public EtatEntry Etat { get; set; }
+        public int EmployeeId { get; set; } = 1;
+        // Propriété de navigation pour la relation plusieurs à un avec Employee
+        public virtual Employee? Employee { get; set; }
 
         [Required]
-        [Range(1, 52, ErrorMessage = "Le numéro de semaine doit être compris entre 1 et 52.")]
-        public int NumeroSemaine { get; set; }
+        public EntryState State { get; set; } = EntryState.Sauvegarde;
 
-        [Range(0, 12)]
-        public int? HeuresLundi { get; set; }
+        [Required]
+        [Range(1,52)]
+        public int Week { get; set; }
 
-        [Range(0, 12)]
-        public int? HeuresMardi { get; set; }
 
-        [Range(0, 12)]
-        public int? HeuresMercredi { get; set; }
+        public int? SundayHours { get; set; } = 0;
+        public int? MondayHours { get; set; } = 0;
+        public int? TuesdayHours { get; set; } = 0;
+        public int? WednesdayHours { get; set; } = 0;
+        public int? ThursdayHours { get; set; } = 0;
+        public int? FridayHours { get; set; } = 0;
+        public int? SaturdayHours { get; set; } = 0;
+    }
 
-        [Range(0, 12)]
-        public int? HeuresJeudi { get; set; }
-
-        [Range(0, 12)]
-        public int? HeuresVendredi { get; set; }
-
-        [Range(0, 12)]
-        public int? HeuresSamedi { get; set; }
-
-        [Range(0, 12)]
-        public int? HeuresDimanche { get; set; }
+    public enum EntryState
+    {
+        Valide,
+        Refuse,
+        Sauvegarde,
+        Soumis
     }
 }

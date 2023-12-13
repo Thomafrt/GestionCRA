@@ -4,19 +4,16 @@ using GestionCRA.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace GestionCRA.Data.Migrations
+namespace GestionCRA.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231212130826_MAJEntry")]
-    partial class MAJEntry
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,27 +21,6 @@ namespace GestionCRA.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("CRA.Models.Admin", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Admins");
-                });
 
             modelBuilder.Entity("CRA.Models.Employee", b =>
                 {
@@ -88,9 +64,6 @@ namespace GestionCRA.Data.Migrations
                     b.Property<int?>("MondayHours")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ReportId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("SaturdayHours")
                         .HasColumnType("int");
 
@@ -109,7 +82,7 @@ namespace GestionCRA.Data.Migrations
                     b.Property<int?>("WednesdayHours")
                         .HasColumnType("int");
 
-                    b.Property<int>("WeekNb")
+                    b.Property<int>("Week")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -117,8 +90,6 @@ namespace GestionCRA.Data.Migrations
                     b.HasIndex("EmployeeId");
 
                     b.HasIndex("MissionId");
-
-                    b.HasIndex("ReportId");
 
                     b.ToTable("Entries");
                 });
@@ -148,35 +119,6 @@ namespace GestionCRA.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Missions");
-                });
-
-            modelBuilder.Entity("CRA.Models.Report", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BeginWeek")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EndWeek")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MissionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.HasIndex("MissionId");
-
-                    b.ToTable("Reports");
                 });
 
             modelBuilder.Entity("EmployeeMission", b =>
@@ -410,28 +352,9 @@ namespace GestionCRA.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CRA.Models.Report", null)
-                        .WithMany("Entries")
-                        .HasForeignKey("ReportId");
-
                     b.Navigation("Employee");
 
                     b.Navigation("Mission");
-                });
-
-            modelBuilder.Entity("CRA.Models.Report", b =>
-                {
-                    b.HasOne("CRA.Models.Employee", "Employee")
-                        .WithMany("Reports")
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CRA.Models.Mission", null)
-                        .WithMany("Reports")
-                        .HasForeignKey("MissionId");
-
-                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("EmployeeMission", b =>
@@ -503,18 +426,9 @@ namespace GestionCRA.Data.Migrations
             modelBuilder.Entity("CRA.Models.Employee", b =>
                 {
                     b.Navigation("Entries");
-
-                    b.Navigation("Reports");
                 });
 
             modelBuilder.Entity("CRA.Models.Mission", b =>
-                {
-                    b.Navigation("Entries");
-
-                    b.Navigation("Reports");
-                });
-
-            modelBuilder.Entity("CRA.Models.Report", b =>
                 {
                     b.Navigation("Entries");
                 });
