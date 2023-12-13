@@ -30,8 +30,6 @@
                 <input asp-for="SemaineFin" class="form-control" />
                 <span asp-validation-for="SemaineFin" class="text-danger"></span>
             </div>
-
-            <!-- Ajout de la liste déroulante multisélection pour les employés -->
             <div class="form-group">
                 <label for="EmployeeIds">Employees</label>
                 <select asp-for="EmployeeIds" class="form-control" asp-items="ViewBag.EmployeeList" multiple></select>

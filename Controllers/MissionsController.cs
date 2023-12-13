@@ -26,10 +26,8 @@ namespace GestionCRA.Controllers
             {
                 return Problem("Entity set 'ApplicationDbContext.Missions' is null.");
             }
-
-            // Charger les employés liés lors de la récupération des missions
             var missions = await _context.Missions
-                .Include(m => m.Employees) // Charger les employés liés
+                .Include(m => m.Employees)
                 .ToListAsync();
 
             return View(missions);
@@ -39,7 +37,6 @@ namespace GestionCRA.Controllers
         // GET: Missions/Create
         public IActionResult Create()
         {
-            // Charger la liste des employés pour la vue
             ViewBag.EmployeeList = new MultiSelectList(_context.Employees, "Id", "Nom");
             return View();
         }
@@ -52,7 +49,6 @@ namespace GestionCRA.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Charger les employés sélectionnés
                 mission.Employees = await _context.Employees
                     .Where(e => mission.EmployeeIds.Contains(e.Id))
                     .ToListAsync();
@@ -61,8 +57,6 @@ namespace GestionCRA.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-
-            // Recharger la liste des employés pour la vue
             ViewBag.EmployeeList = new SelectList(_context.Employees, "Id", "Nom", mission.EmployeeIds);
             return View(mission);
         }
@@ -77,15 +71,13 @@ namespace GestionCRA.Controllers
             }
 
             var mission = await _context.Missions
-                .Include(m => m.Employees)  // Inclure la liste des employés associés à la mission
+                .Include(m => m.Employees)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (mission == null)
             {
                 return NotFound();
             }
-
-            // Charger la liste des employés pour la vue
             ViewBag.EmployeeList = new MultiSelectList(_context.Employees, "Id", "Nom", mission.EmployeeIds);
 
             return View(mission);
@@ -106,7 +98,6 @@ namespace GestionCRA.Controllers
             {
                 try
                 {
-                    // Charger la mission depuis la base de données avec les employés associés
                     var existingMission = await _context.Missions
                         .Include(m => m.Employees)
                         .FirstOrDefaultAsync(m => m.Id == id);
@@ -115,14 +106,10 @@ namespace GestionCRA.Controllers
                     {
                         return NotFound();
                     }
-
-                    // Mettre à jour les propriétés de la mission
                     existingMission.Nom = mission.Nom;
                     existingMission.Description = mission.Description;
                     existingMission.SemaineDebut = mission.SemaineDebut;
                     existingMission.SemaineFin = mission.SemaineFin;
-
-                    // Charger les employés sélectionnés
                     existingMission.Employees = await _context.Employees
                         .Where(e => mission.EmployeeIds.Contains(e.Id))
                         .ToListAsync();
@@ -143,8 +130,6 @@ namespace GestionCRA.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-
-            // Si la validation a échoué, rechargez la liste des employés pour la vue
             ViewBag.EmployeeList = new MultiSelectList(_context.Employees, "Id", "Nom", mission.EmployeeIds);
             return View(mission);
         }
@@ -160,7 +145,7 @@ namespace GestionCRA.Controllers
             }
 
             var mission = await _context.Missions
-                .Include(m => m.Employees)  // Charger les employés associés à la mission
+                .Include(m => m.Employees)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (mission == null)

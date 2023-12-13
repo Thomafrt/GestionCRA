@@ -33,11 +33,10 @@ namespace GestionCRA.Controllers
 
             if (entry == null)
             {
-                return NotFound(); // Entrée non trouvée, renvoyer une vue appropriée ou une erreur.
+                return NotFound();
             }
-
             entry.State = EntryState.Soumis;
-            _context.SaveChanges(); // Sauvegarder les modifications dans la base de données
+            _context.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }
@@ -52,8 +51,6 @@ namespace GestionCRA.Controllers
         }
 
         // POST: Entries/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,MissionId,EmployeeId,State,Week,SundayHours,MondayHours,TuesdayHours,WednesdayHours,ThursdayHours,FridayHours,SaturdayHours")] Entry entry)
@@ -88,8 +85,6 @@ namespace GestionCRA.Controllers
         }
 
         // POST: Entries/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,MissionId,EmployeeId,State,Week,SundayHours,MondayHours,TuesdayHours,WednesdayHours,ThursdayHours,FridayHours,SaturdayHours")] Entry entry)
@@ -163,11 +158,11 @@ namespace GestionCRA.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
         private bool EntryExists(int id)
         {
           return (_context.Entries?.Any(e => e.Id == id)).GetValueOrDefault();
         }
-
 
 
         public async Task<IActionResult> ValidateEntry()
@@ -180,19 +175,17 @@ namespace GestionCRA.Controllers
 
             return View(soumisEntries);
         }
+
         [HttpPost]
         public IActionResult Refuse(int id)
         {
             var entry = _context.Entries.Find(id);
-
             if (entry == null)
             {
                 return NotFound();
             }
-
             entry.State = CRA.Models.EntryState.Refuse;
             _context.SaveChanges();
-
             return RedirectToAction("ValidateEntry");
         }
 
@@ -200,15 +193,12 @@ namespace GestionCRA.Controllers
         public IActionResult Validate(int id)
         {
             var entry = _context.Entries.Find(id);
-
             if (entry == null)
             {
                 return NotFound();
             }
-
             entry.State = CRA.Models.EntryState.Valide;
             _context.SaveChanges();
-
             return RedirectToAction("ValidateEntry");
         }
 

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GestionCRA.Migrations
 {
     /// <inheritdoc />
-    public partial class initv2 : Migration
+    public partial class NomMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -187,6 +187,27 @@ namespace GestionCRA.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Reports",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EmployeeId = table.Column<int>(type: "int", nullable: false),
+                    WeekStart = table.Column<int>(type: "int", nullable: false),
+                    WeekEnd = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reports", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Reports_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "EmployeeMission",
                 columns: table => new
                 {
@@ -226,7 +247,8 @@ namespace GestionCRA.Migrations
                     WednesdayHours = table.Column<int>(type: "int", nullable: true),
                     ThursdayHours = table.Column<int>(type: "int", nullable: true),
                     FridayHours = table.Column<int>(type: "int", nullable: true),
-                    SaturdayHours = table.Column<int>(type: "int", nullable: true)
+                    SaturdayHours = table.Column<int>(type: "int", nullable: true),
+                    ReportId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -243,6 +265,11 @@ namespace GestionCRA.Migrations
                         principalTable: "Missions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Entries_Reports_ReportId",
+                        column: x => x.ReportId,
+                        principalTable: "Reports",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -298,6 +325,16 @@ namespace GestionCRA.Migrations
                 name: "IX_Entries_MissionId",
                 table: "Entries",
                 column: "MissionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Entries_ReportId",
+                table: "Entries",
+                column: "ReportId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reports_EmployeeId",
+                table: "Reports",
+                column: "EmployeeId");
         }
 
         /// <inheritdoc />
@@ -331,10 +368,13 @@ namespace GestionCRA.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Employees");
+                name: "Missions");
 
             migrationBuilder.DropTable(
-                name: "Missions");
+                name: "Reports");
+
+            migrationBuilder.DropTable(
+                name: "Employees");
         }
     }
 }

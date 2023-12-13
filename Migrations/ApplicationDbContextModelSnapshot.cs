@@ -64,6 +64,9 @@ namespace GestionCRA.Migrations
                     b.Property<int?>("MondayHours")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ReportId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("SaturdayHours")
                         .HasColumnType("int");
 
@@ -90,6 +93,8 @@ namespace GestionCRA.Migrations
                     b.HasIndex("EmployeeId");
 
                     b.HasIndex("MissionId");
+
+                    b.HasIndex("ReportId");
 
                     b.ToTable("Entries");
                 });
@@ -119,6 +124,30 @@ namespace GestionCRA.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Missions");
+                });
+
+            modelBuilder.Entity("CRA.Models.Report", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WeekEnd")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WeekStart")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("Reports");
                 });
 
             modelBuilder.Entity("EmployeeMission", b =>
@@ -352,9 +381,24 @@ namespace GestionCRA.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("CRA.Models.Report", null)
+                        .WithMany("Entries")
+                        .HasForeignKey("ReportId");
+
                     b.Navigation("Employee");
 
                     b.Navigation("Mission");
+                });
+
+            modelBuilder.Entity("CRA.Models.Report", b =>
+                {
+                    b.HasOne("CRA.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("EmployeeMission", b =>
@@ -429,6 +473,11 @@ namespace GestionCRA.Migrations
                 });
 
             modelBuilder.Entity("CRA.Models.Mission", b =>
+                {
+                    b.Navigation("Entries");
+                });
+
+            modelBuilder.Entity("CRA.Models.Report", b =>
                 {
                     b.Navigation("Entries");
                 });

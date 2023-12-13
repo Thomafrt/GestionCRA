@@ -10,12 +10,10 @@ namespace CRA.Models
 
         [Required]
         public int MissionId { get; set; } = 1;
-        // Propriété de navigation pour la relation plusieurs à un avec Mission
         public virtual Mission? Mission { get; set; }
 
         [Required]
         public int EmployeeId { get; set; } = 1;
-        // Propriété de navigation pour la relation plusieurs à un avec Employee
         public virtual Employee? Employee { get; set; }
 
         [Required]
@@ -25,14 +23,30 @@ namespace CRA.Models
         [Range(1,52)]
         public int Week { get; set; }
 
-
-        public int? SundayHours { get; set; } = 0;
+        [Range(0, 12, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
         public int? MondayHours { get; set; } = 0;
+        [Range(0, 12, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
         public int? TuesdayHours { get; set; } = 0;
+        [Range(0, 12, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
         public int? WednesdayHours { get; set; } = 0;
+        [Range(0, 12, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
         public int? ThursdayHours { get; set; } = 0;
+        [Range(0, 12, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
         public int? FridayHours { get; set; } = 0;
+        [Range(0, 12, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
         public int? SaturdayHours { get; set; } = 0;
+        [Range(0, 12, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
+        public int? SundayHours { get; set; } = 0;
+
+        [NotMapped]
+        public int TotalHours
+        {
+            get
+            {
+                return (SundayHours ?? 0) + (MondayHours ?? 0) + (TuesdayHours ?? 0) + (WednesdayHours ?? 0)
+                     + (ThursdayHours ?? 0) + (FridayHours ?? 0) + (SaturdayHours ?? 0);
+            }
+        }
     }
 
     public enum EntryState

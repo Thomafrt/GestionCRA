@@ -20,10 +20,7 @@ namespace CRA.Models
         [Required]
         public int SemaineFin { get; set; }
 
-        // Propriété de navigation pour la relation plusieurs à plusieurs avec Employee
         public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
-
-        // Propriété pour stocker les identifiants des employés associés à la mission
         [NotMapped]
         public List<int> EmployeeIds { get; set; } = new List<int>();
 
