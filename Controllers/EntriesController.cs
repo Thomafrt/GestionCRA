@@ -26,6 +26,23 @@ namespace GestionCRA.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        [HttpPost]
+        public IActionResult Submit(int id)
+        {
+            Entry entry = _context.Entries.Find(id);
+
+            if (entry == null)
+            {
+                return NotFound(); // Entrée non trouvée, renvoyer une vue appropriée ou une erreur.
+            }
+
+            entry.State = EntryState.Soumis;
+            _context.SaveChanges(); // Sauvegarder les modifications dans la base de données
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
         // GET: Entries/Create
         public IActionResult Create()
         {
@@ -152,42 +169,48 @@ namespace GestionCRA.Controllers
         }
 
 
+
         public async Task<IActionResult> ValidateEntry()
         {
-            var applicationDbContext = _context.Entries.Include(e => e.Employee).Include(e => e.Mission);
-            return View(await applicationDbContext.ToListAsync());
-        }
+            var soumisEntries = await _context.Entries
+                .Include(e => e.Employee)
+                .Include(e => e.Mission)
+                .Where(e => e.State == EntryState.Soumis)
+                .ToListAsync();
 
+            return View(soumisEntries);
+        }
         [HttpPost]
-        public IActionResult Validate(int id, string newState)
+        public IActionResult Refuse(int id)
         {
-            Entry entry = _context.Entries.Find(id);
+            var entry = _context.Entries.Find(id);
 
             if (entry == null)
             {
-                return NotFound(); // Entrée non trouvée, renvoyer une vue appropriée ou une erreur.
+                return NotFound();
             }
 
-            // Mettre à jour l'état en fonction du bouton cliqué
-            switch (newState)
-            {
-                case "Valide":
-                    entry.State = EntryState.Valide;
-                    break;
-                case "Refuse":
-                    entry.State = EntryState.Refuse;
-                    break;
-                // Ajoutez d'autres états si nécessaire
-                default:
-                    // Gérer un état inattendu
-                    break;
-            }
+            entry.State = CRA.Models.EntryState.Refuse;
+            _context.SaveChanges();
 
-            _context.SaveChanges(); // Sauvegarder les modifications dans la base de données
-
-            return RedirectToAction("Details", new { id = entry.Id });
+            return RedirectToAction("ValidateEntry");
         }
 
+        [HttpPost]
+        public IActionResult Validate(int id)
+        {
+            var entry = _context.Entries.Find(id);
+
+            if (entry == null)
+            {
+                return NotFound();
+            }
+
+            entry.State = CRA.Models.EntryState.Valide;
+            _context.SaveChanges();
+
+            return RedirectToAction("ValidateEntry");
+        }
 
     }
 }

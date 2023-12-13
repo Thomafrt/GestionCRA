@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<CRA.Models.Entry>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Entry Index";
 }
 
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success">Create New Entry</a>
 </p>
 <table class="table">
     <thead>
@@ -23,9 +23,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Week)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SundayHours)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.MondayHours)
@@ -45,50 +42,81 @@
             <th>
                 @Html.DisplayNameFor(model => model.SaturdayHours)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SundayHours)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Mission.Nom)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Employee.Nom)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.State)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Week)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SundayHours)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MondayHours)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TuesdayHours)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.WednesdayHours)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ThursdayHours)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FridayHours)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SaturdayHours)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            var rowClass = string.Empty;
+
+            switch (item.State)
+            {
+                case CRA.Models.EntryState.Valide:
+                    rowClass = "table-success"; // Vert
+                    break;
+                case CRA.Models.EntryState.Sauvegarde:
+                    rowClass = "table-warning"; // Orange
+                    break;
+                case CRA.Models.EntryState.Soumis:
+                    rowClass = "table-info"; // Bleu
+                    break;
+                case CRA.Models.EntryState.Refuse:
+                    rowClass = "table-danger"; // Rouge
+                    break;
+                default:
+                    break;
+            }
+
+            <tr class="@rowClass">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Mission.Nom)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Employee.Nom)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.State)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Week)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MondayHours)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TuesdayHours)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WednesdayHours)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ThursdayHours)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FridayHours)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SaturdayHours)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SundayHours)
+                </td>
+                <td>
+                    @if (item.State != CRA.Models.EntryState.Soumis && item.State != CRA.Models.EntryState.Valide)
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                        <form asp-action="Submit" method="post" class="d-inline">
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

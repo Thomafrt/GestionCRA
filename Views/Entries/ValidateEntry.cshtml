@@ -1,91 +1,110 @@
 ﻿@model IEnumerable<CRA.Models.Entry>
 
 @{
-    ViewData["Title"] = "Validate";
+    ViewData["Title"] = "Validate Entry";
 }
 
-<h1>Index</h1>
+<h1>Validate Entry</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Mission)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Employee)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.State)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Week)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SundayHours)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MondayHours)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TuesdayHours)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.WednesdayHours)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ThursdayHours)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FridayHours)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SaturdayHours)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+@if (!Model.Any())
+{
+    <p>No entries to validate.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Mission.Nom)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Employee.Nom)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.State)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Week)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SundayHours)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MondayHours)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TuesdayHours)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.WednesdayHours)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ThursdayHours)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FridayHours)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SaturdayHours)
-                </td>
-                <td>
-                    <a asp-action="Validate" asp-route-id="@item.Id">Validation</a>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Mission)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Employee)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.State)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Week)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MondayHours)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TuesdayHours)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.WednesdayHours)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ThursdayHours)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FridayHours)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SaturdayHours)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SundayHours)
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Mission.Nom)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Employee.Nom)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.State)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Week)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MondayHours)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TuesdayHours)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.WednesdayHours)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ThursdayHours)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FridayHours)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SaturdayHours)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SundayHours)
+                    </td>
+                    <td>
+                        @if (item.State == CRA.Models.EntryState.Soumis)
+                        {
+                            <form asp-action="Refuse" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <button type="submit" class="btn btn-danger">Refuse</button>
+                            </form>
+
+                            <form asp-action="Validate" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <button type="submit" class="btn btn-success">Validate</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
